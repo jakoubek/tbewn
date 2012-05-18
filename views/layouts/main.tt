@@ -14,22 +14,31 @@
 </head>
 <body>
     <div id="header">
-        <h1>[<a href="/">tbewn</a>]</h1>
+        <h1 id="tbewn">[<a href="/">tbewn</a>]</h1>
+        
+<div id="headerparts">
+        <a href="/search?q=%23faq">FAQ</a> | <a href="/search?q=%23tbewn-todo">TODO</a> | Serving since 2012-05-16
+    </div>
+
+<div id="headerright">
+        
+
 
 <form action="/search" method="GET">
 <input type="search" name="q" size="20" placeholder="Suchen nach ..." autofocus="autofocus" />
 <input type="submit" value="Suchen" />
 </form>
 
-
-<a href="/search?q=%23faq">FAQ</a> | <% anzahl %> Einträge seit 2012-05-16 | <a href="/search?q=%23tbewn-todo">TODO</a>
+</div>
 
     </div>
+    <div class="clear" />
+
 <% content %>
 <div id="footer">
     <hr />
 <% USE FormatDauer %>
-Powered by <a href="http://perldancer.org/">Dancer</a> <% dancer_version %><% IF dauer %> | Geliefert in <% dauer | $FormatDauer %> Sekunden<% END %> | <a href="/add">add a new entry</a> | This is <a href="<% vars.website %>"><% vars.appname %></a> (revision: <a href="<% vars.website %>/commit/<% vars.commitid %>"><% vars.revision %></a>)
+Powered by <a href="http://perldancer.org/">Dancer</a> <% dancer_version %><% IF dauer %> | Served <% anzahl %> entries in <% dauer | $FormatDauer %> seconds<% END %> | <a href="/add">add a new entry</a> | This is <a href="<% vars.website %>"><% vars.appname %></a> (revision: <a href="<% vars.website %>/commit/<% vars.commitid %>"><% vars.revision %></a>)
 </div>
 </body>
 </html>
