@@ -13,7 +13,7 @@ our $VERSION = '0.1';
 hook 'before' => sub {
     var appname => config->{appname};
     my $revision = -e 'revision' ? read_file 'revision' : '{}';
-    var revision => $revision;
+    var revision => substr($revision, 0, 7);
 };
 
 get '/' => sub {
