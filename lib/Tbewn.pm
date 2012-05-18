@@ -76,6 +76,7 @@ post '/add' =>  sub {
       title => params->{title},
       text  => params->{text},
       author => params->{author},
+      format => (defined params->{format}) ? params->{format} : 'plain',
     };
 
     write_file $filename, to_json($data);
@@ -98,6 +99,7 @@ post '/edit' => sub {
       title => params->{title},
       text  => params->{text},
       author => params->{author},
+      format => (defined params->{format}) ? params->{format} : 'plain',
     };
     my $filename = config->{data}{json};
     write_file $filename, to_json($data);
