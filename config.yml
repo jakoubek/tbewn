@@ -7,6 +7,9 @@ appname: "tbewn"
 
 website: "https://github.com/jakoubek/tbewn"
 
+special_sites:
+    about:  "1337351651"
+
 # The default layout to use for your application (located in
 # views/layouts/main.tt)
 layout: "main"
