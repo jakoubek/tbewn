@@ -1,4 +1,4 @@
-package DanceMe;
+package Tbewn;
 use Dancer ':syntax';
 use Dancer::Plugin::Cache::CHI;
 
@@ -9,6 +9,12 @@ use Time::HiRes qw(gettimeofday);
 our $VERSION = '0.1';
 
 #check_page_cache;
+
+hook 'before' => sub {
+    var appname => config->{appname};
+    my $revision = -e 'revision' ? read_file 'revision' : '{}';
+    var revision => $revision;
+};
 
 get '/' => sub {
     my $before = gettimeofday;
@@ -54,11 +60,11 @@ get '/-:id' => sub {
     template 'entry', {data => $data->{$id}, id => $id, dauer => $elapsed};
 };
 
-get '/page' => sub {
-    template 'page';
+get '/add' => sub {
+    template 'add';
 };
 
-post '/page' =>  sub {
+post '/add' =>  sub {
     my $filename = config->{dwimmer}{json};
     my $json = -e $filename ? read_file $filename : '{}';
     my $data = from_json encode('UTF-8', $json);
