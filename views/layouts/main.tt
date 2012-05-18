@@ -17,7 +17,7 @@
         <h1 id="tbewn">[<a href="/" title="back to the main page">tbewn</a>]</h1>
         
 <div id="headerparts">
-        <a href="/about" title="About tbewn.">?</a> | <a href="/search?q=%23faq" title="Frequently asked questions">FAQ</a> | <a href="/search?q=%23tbewn-todo" title="tbewn is work in progress">TODO</a> | <span class="slogan">Serving since 2012-05-16</span>
+        <a href="/about" title="About tbewn.">?</a> | <a href="/search?q=%3Afaq" title="Frequently asked questions">FAQ</a> | <a href="/search?q=%3Atbewn-todo" title="tbewn is work in progress">TODO</a> | <span class="slogan">Serving since 2012-05-16</span>
     </div>
 
 <div id="headerright">
