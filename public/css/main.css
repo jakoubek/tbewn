@@ -21,6 +21,10 @@ div#headerright {
     text-align: left;
 }
 
+span.slogan {
+    font-style: italic;
+}
+
 div.item {
     border-top: 1px solid gray;
     margin-top: .2em;

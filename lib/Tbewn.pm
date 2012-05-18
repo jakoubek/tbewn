@@ -47,9 +47,10 @@ get '/search' => sub {
             }
         }
     }
-    
+   
+    my $anzahl = keys %result;
     my $elapsed = gettimeofday - $before;
-    template 'index', {data => \%result, dauer => $elapsed};
+    template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed};
 };
 
 get '/-:id' => sub {
