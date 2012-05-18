@@ -14,10 +14,10 @@
 </head>
 <body>
     <div id="header">
-        <h1 id="tbewn">[<a href="/">tbewn</a>]</h1>
+        <h1 id="tbewn">[<a href="/" title="back to the main page">tbewn</a>]</h1>
         
 <div id="headerparts">
-        <a href="/search?q=%23faq">FAQ</a> | <a href="/search?q=%23tbewn-todo">TODO</a> | <span class="slogan">Serving since 2012-05-16</span>
+        <a href="" title="About tbewn.">?</a> | <a href="/search?q=%23faq" title="Frequently asked questions">FAQ</a> | <a href="/search?q=%23tbewn-todo" title="tbewn is work in progress">TODO</a> | <span class="slogan">Serving since 2012-05-16</span>
     </div>
 
 <div id="headerright">
@@ -25,8 +25,8 @@
 
 
 <form action="/search" method="GET">
-<input type="search" name="q" size="20" placeholder="Suchen nach ..." autofocus="autofocus" />
-<input type="submit" value="Suchen" />
+<input type="search" name="q" size="20" placeholder="Search for ..." autofocus="autofocus" />
+<input type="submit" value="search" />
 </form>
 
 </div>
