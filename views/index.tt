@@ -1,0 +1,10 @@
+<% USE FormatDate %>
+
+<ul>
+<% FOR e IN data.keys.sort.reverse %>
+<li>
+[<a href="/-<% e %>"><% e | $FormatDate %></a>] <% IF data.$e.author %>[<a href="/<% data.$e.author %>"><% data.$e.author %></a>] <% END %><% IF data.$e.title %><span class="title"><% data.$e.title %>.</span> <% END %><% data.$e.text %>
+<div class="clear" />
+</li>
+<% END %>
+</ul>

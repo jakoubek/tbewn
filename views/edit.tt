@@ -1,0 +1,14 @@
+<form action="/edit" method="POST">
+<input type="hidden" name="id" value="<% id %>" />
+<input type="radio" name="author" value="oli" checked="checked">Oli<br>
+<input name="title" size="80" value="<% data.title %>" /><br />
+<textarea name="text" rows="20" cols="80">
+<% data.text %>
+</textarea><br />
+<input type="submit" value="Post" />
+</form>
+
+<form action="/delete" method="POST">
+<input type="hidden" name="id" value="<% id %>"/>
+<input type="submit" value="Eintrag löschen" />
+</form>
