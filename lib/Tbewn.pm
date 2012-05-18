@@ -115,6 +115,11 @@ post '/delete' => sub {
     redirect '/';
 };
 
+get '/about' => sub {
+    my $about_id = config->{special_sites}{about};
+    redirect '/-'.$about_id;
+};
+
 get '/clear-cache' => sub {
     cache->clear();
     redirect '/';

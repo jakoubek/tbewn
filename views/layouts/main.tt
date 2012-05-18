@@ -17,7 +17,7 @@
         <h1 id="tbewn">[<a href="/" title="back to the main page">tbewn</a>]</h1>
         
 <div id="headerparts">
-        <a href="" title="About tbewn.">?</a> | <a href="/search?q=%23faq" title="Frequently asked questions">FAQ</a> | <a href="/search?q=%23tbewn-todo" title="tbewn is work in progress">TODO</a> | <span class="slogan">Serving since 2012-05-16</span>
+        <a href="/about" title="About tbewn.">?</a> | <a href="/search?q=%23faq" title="Frequently asked questions">FAQ</a> | <a href="/search?q=%23tbewn-todo" title="tbewn is work in progress">TODO</a> | <span class="slogan">Serving since 2012-05-16</span>
     </div>
 
 <div id="headerright">
@@ -38,7 +38,7 @@
 <div id="footer">
     <hr />
 <% USE FormatDauer %>
-Powered by <a href="http://perldancer.org/">Dancer</a> <% dancer_version %><% IF dauer %> | Served <% anzahl %> entries in <% dauer | $FormatDauer %> seconds<% END %> | <a href="/add">add a new entry</a> | This is <a href="<% vars.website %>"><% vars.appname %></a> (revision: <a href="<% vars.website %>/commit/<% vars.commitid %>"><% vars.revision %></a>)
+Powered by <a href="http://perldancer.org/">Dancer</a> <% dancer_version %><% IF dauer && anzahl %> | Served <% anzahl %> entries in <% dauer | $FormatDauer %> seconds<% END %> | <a href="/add">add a new entry</a> | This is <a href="<% vars.website %>"><% vars.appname %></a> (revision: <a href="<% vars.website %>/commit/<% vars.commitid %>"><% vars.revision %></a>)
 </div>
 </body>
 </html>
