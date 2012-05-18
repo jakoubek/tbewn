@@ -29,7 +29,7 @@
 <div id="footer">
     <hr />
 <% USE FormatDauer %>
-Powered by <a href="http://perldancer.org/">Dancer</a> <% dancer_version %><% IF dauer %> | Geliefert in <% dauer | $FormatDauer %> Sekunden<% END %> | <a href="/add">add a new entry</a> | <% vars.appname %> revision: <% vars.revision %>
+Powered by <a href="http://perldancer.org/">Dancer</a> <% dancer_version %><% IF dauer %> | Geliefert in <% dauer | $FormatDauer %> Sekunden<% END %> | <a href="/add">add a new entry</a> | This is <a href="<% vars.website %>"><% vars.appname %></a> (revision: <a href="<% vars.website %>/commit/<% vars.commitid %>"><% vars.revision %></a>)
 </div>
 </body>
 </html>
