@@ -1,0 +1,20 @@
+div.item {
+    border-top: 1px solid gray;
+    margin-top: .2em;
+}
+
+div.item span.timestamp {
+    width: 1em;
+}
+
+span.title {
+    font-style: italic;
+}
+
+div.item p {
+    float: left;
+}
+
+div.clear {
+    clear: both;
+}
