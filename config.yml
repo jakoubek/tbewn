@@ -30,8 +30,8 @@ engines:
 #     start_tag: '[%'
 #     end_tag:   '%]'
 
-dwimmer:
-    json: ./dwimmer.json
+data:
+    json: ./data.json
 
 plugins:
     'Cache::CHI':

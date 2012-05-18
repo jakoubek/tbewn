@@ -54,7 +54,7 @@ get '/search' => sub {
 
 get '/-:id' => sub {
     my $before = gettimeofday;
-    my $filename = config->{dwimmer}{json};
+    my $filename = config->{data}{json};
     my $json = -e $filename ? read_file $filename : '{}';
     my $data = from_json encode('UTF-8', $json);
     my $id = param('id');
@@ -67,7 +67,7 @@ get '/add' => sub {
 };
 
 post '/add' =>  sub {
-    my $filename = config->{dwimmer}{json};
+    my $filename = config->{data}{json};
     my $json = -e $filename ? read_file $filename : '{}';
     my $data = from_json encode('UTF-8', $json);
     my $now   = time;
@@ -98,14 +98,14 @@ post '/edit' => sub {
       text  => params->{text},
       author => params->{author},
     };
-    my $filename = config->{dwimmer}{json};
+    my $filename = config->{data}{json};
     write_file $filename, to_json($data);
     redirect '/';
 };
 
 post '/delete' => sub {
     my $id = param('id');
-    my $filename = config->{dwimmer}{json};
+    my $filename = config->{data}{json};
     my $json = -e $filename ? read_file $filename : '{}';
     my $data = from_json encode('UTF-8', $json);
     delete $data->{$id};
@@ -122,7 +122,7 @@ get '/clear-cache' => sub {
 true;
 
 sub get_startseite {
-    my $filename = config->{dwimmer}{json};
+    my $filename = config->{data}{json};
     my $json = -e $filename ? read_file $filename : '{}';
     my $data = from_json encode('UTF-8', $json);
     return $data;

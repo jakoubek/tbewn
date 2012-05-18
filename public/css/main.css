@@ -1,3 +1,26 @@
+div#header {
+    margin-top: 0em;
+    width: 100%;
+}
+
+div#header h1#tbewn {
+    margin-top: 0em;
+    float: left;
+    margin-right: 10px;
+}
+
+div#headerparts {
+    padding-top: 15px;
+    vertical-align: bottom;
+    float: left;
+}
+
+div#headerright {
+    padding-top: 15px;
+    float: right;
+    text-align: left;
+}
+
 div.item {
     border-top: 1px solid gray;
     margin-top: .2em;
