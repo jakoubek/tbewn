@@ -53,6 +53,26 @@ get '/search' => sub {
     template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed};
 };
 
+get '/author/:authorid' => sub {
+    my $before = gettimeofday;
+    my $author_id = param('authorid');
+    my $data = get_startseite();
+
+    my %result;
+    while (my ($key, $value) = each %$data) {
+        if (defined $value->{author} && $value->{author} =~ m/$author_id/i) {
+            $result{$key} = {
+                title => $value->{title},
+                text  => $value->{text},
+            }
+        }
+    }
+
+    my $anzahl = keys %result;
+    my $elapsed = gettimeofday - $before;
+    template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed, author_id => $author_id};
+};
+
 get '/-:id' => sub {
     my $before = gettimeofday;
     my $filename = config->{data}{json};
