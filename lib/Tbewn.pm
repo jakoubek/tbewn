@@ -167,28 +167,36 @@ get '/t/:tagname' => sub {
     my $before = gettimeofday;
     my $tagname = params->{'tagname'};
     my $tags = get_tags();
-    my @entries = @{$tags->{'entries'}->{$tagname}->{'entries'}};
-    my %entries_h;
-    foreach my $e (@entries) {
-        debug("+ $e");
-        $entries_h{$e} = 1;
-    }
 
-    my $data = get_startseite();
+    my @taglist = @{$tags->{'list'}};
+    if (grep $_ eq $tagname, @taglist) {
 
-    my %result;
-    while (my ($key, $value) = each %$data) {
-        debug($key);
-        if (exists $entries_h{$key}) {
-            debug("GEFUNDEN");
-            $result{$key} = $value;
+        my @entries = @{$tags->{'entries'}->{$tagname}->{'entries'}};
+        my %entries_h;
+        foreach my $e (@entries) {
+            debug("+ $e");
+            $entries_h{$e} = 1;
         }
-    }
 
-    my $anzahl = scalar @entries;
-    debug("found $anzahl");
-    my $elapsed = gettimeofday - $before;
-    template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed};
+        my $data = get_startseite();
+
+        my %result;
+        while (my ($key, $value) = each %$data) {
+            debug($key);
+            if (exists $entries_h{$key}) {
+                debug("GEFUNDEN");
+                $result{$key} = $value;
+            }
+        }
+
+        my $anzahl = scalar @entries;
+        debug("found $anzahl");
+        my $elapsed = gettimeofday - $before;
+        template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed};
+
+    } else {
+        redirect '/';
+    }
 
 };
 
