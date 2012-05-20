@@ -35,6 +35,7 @@ engines:
 
 data:
     json: ./data.json
+    authors: ./authors.json
     tags: ./tags.json
 
 plugins:

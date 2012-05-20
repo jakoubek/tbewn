@@ -22,10 +22,11 @@ get '/' => sub {
     my $before = gettimeofday;
     #my $data = cache->compute( 'startseite', '5min', sub { get_startseite() } );
     my $data = get_startseite();
+    my $authors = get_authors();
     my $tags = get_tags();
     my $anzahl = keys %{$data};
     my $elapsed = gettimeofday - $before;
-    template 'index', {data => $data, taglist => $tags->{'list'}, anzahl => $anzahl, dauer => $elapsed};
+    template 'index', {data => $data, authorlist => $authors->{'list'}, taglist => $tags->{'list'}, anzahl => $anzahl, dauer => $elapsed};
 };
 
 get '/search' => sub {
@@ -57,6 +58,8 @@ get '/search' => sub {
 get '/a/:authorid' => sub {
     my $before = gettimeofday;
     my $author_id = param('authorid');
+    my $authors = get_authors();
+    my $tags = get_tags();
     my $data = get_startseite();
 
     my %result;
@@ -71,7 +74,7 @@ get '/a/:authorid' => sub {
 
     my $anzahl = keys %result;
     my $elapsed = gettimeofday - $before;
-    template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed, author_id => $author_id};
+    template 'index', {data => \%result, authorlist => $authors->{'list'}, taglist => $tags->{'list'}, anzahl => $anzahl, dauer => $elapsed, author_id => $author_id};
 };
 
 get '/-:id' => sub {
@@ -102,7 +105,7 @@ post '/add' =>  sub {
 
     write_file $filename, to_json($data);
     cache->remove('startseite');
-    parse_tags();
+    generate_metadata();
     redirect '/';
 };
 
@@ -125,6 +128,7 @@ post '/edit' => sub {
     };
     my $filename = config->{data}{json};
     write_file $filename, to_json($data);
+    generate_metadata();
     redirect '/';
 };
 
@@ -136,6 +140,7 @@ post '/delete' => sub {
     delete $data->{$id};
     write_file $filename, to_json($data);
     cache->remove('startseite');
+    generate_metadata();
     redirect '/';
 };
 
@@ -149,8 +154,8 @@ get '/clear-cache' => sub {
     redirect '/';
 };
 
-get '/parse-tags' => sub {
-    parse_tags();
+get '/generate-metadata' => sub {
+    generate_metadata();
     redirect '/';
 };
 
@@ -166,6 +171,7 @@ get '/tags' => sub {
 get '/t/:tagname' => sub {
     my $before = gettimeofday;
     my $tagname = params->{'tagname'};
+    my $authors = get_authors();
     my $tags = get_tags();
 
     my @taglist = @{$tags->{'list'}};
@@ -192,7 +198,7 @@ get '/t/:tagname' => sub {
         my $anzahl = scalar @entries;
         debug("found $anzahl");
         my $elapsed = gettimeofday - $before;
-        template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed};
+        template 'index', {data => \%result, authorlist => $authors->{'list'}, taglist => $tags->{'list'}, anzahl => $anzahl, dauer => $elapsed};
 
     } else {
         redirect '/';
@@ -209,6 +215,13 @@ sub get_startseite {
     return $data;
 }
 
+sub get_authors {
+    my $filename = config->{data}{authors};
+    my $json = -e $filename ? read_file $filename : '{}';
+    my $data = from_json encode('UTF-8', $json);
+    return $data;
+}
+
 sub get_tags {
     my $filename = config->{data}{tags};
     my $json = -e $filename ? read_file $filename : '{}';
@@ -216,23 +229,35 @@ sub get_tags {
     return $data;
 }
 
-sub parse_tags {
+sub generate_metadata {
+    my $authorsfile = config->{data}{authors};
     my $tagsfile = config->{data}{tags};
+    
     my $data = get_startseite();
+    
+    my %authors;
     my %tag_count;
     my %tag_entries;
+    
     while (my ($key, $value) = each %$data) {
         debug("Eintrag #" . $key);
+        if (defined $value->{'author'}) {
+            $authors{$value->{'author'}}++;
+        }
         my @matches = ($value->{text} =~ m/t:(\w*)/g);
         debug(scalar @matches . "Tags gefunden");
         foreach my $tag (@matches) {
             if ($tag ne '') {
+                $tag = lc $tag;
                 $tag_count{$tag}++;
                 push @{$tag_entries{$tag}}, $key;
                 debug("Tag: $tag");
             }
         }        
     }
+
+    my @authors = keys %authors;
+    my $authordata->{'list'} = \@authors;
 
     my $tagdata;
     while (my ($key, $value) = each %tag_count) {
@@ -244,6 +269,7 @@ sub parse_tags {
     my @taglist = keys %tag_count;
     $tagdata->{'list'} = \@taglist;
 
+    write_file $authorsfile, to_json($authordata);
     write_file $tagsfile, to_json($tagdata);
 
 }

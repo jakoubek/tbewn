@@ -1,10 +1,17 @@
 <% USE FormatDate %>
 
-<p>
+<div id="metalinks">
+authors : 
+<% FOREACH a IN authorlist.sort %>
+<a href="/a/<% a %>"><% a %></a>
+<% END %>
+
+ / tags : 
 <% FOREACH t IN taglist.sort %>
 <a href="/t/<% t %>"><% t %></a>
 <% END %>
-</p>
+
+</div>
 
 <ul>
 <% FOR e IN data.keys.sort.reverse %>
