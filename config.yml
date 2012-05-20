@@ -35,8 +35,11 @@ engines:
 
 data:
     json: ./data.json
+    tags: ./tags.json
 
 plugins:
     'Cache::CHI':
         driver: Memory
         global: 1
+
+logger: "console"

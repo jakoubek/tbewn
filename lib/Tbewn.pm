@@ -22,9 +22,10 @@ get '/' => sub {
     my $before = gettimeofday;
     #my $data = cache->compute( 'startseite', '5min', sub { get_startseite() } );
     my $data = get_startseite();
+    my $tags = get_tags();
     my $anzahl = keys %{$data};
     my $elapsed = gettimeofday - $before;
-    template 'index', {data => $data, anzahl => $anzahl, dauer => $elapsed};
+    template 'index', {data => $data, taglist => $tags->{'list'}, anzahl => $anzahl, dauer => $elapsed};
 };
 
 get '/search' => sub {
@@ -53,7 +54,7 @@ get '/search' => sub {
     template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed};
 };
 
-get '/author/:authorid' => sub {
+get '/a/:authorid' => sub {
     my $before = gettimeofday;
     my $author_id = param('authorid');
     my $data = get_startseite();
@@ -101,6 +102,7 @@ post '/add' =>  sub {
 
     write_file $filename, to_json($data);
     cache->remove('startseite');
+    parse_tags();
     redirect '/';
 };
 
@@ -147,6 +149,49 @@ get '/clear-cache' => sub {
     redirect '/';
 };
 
+get '/parse-tags' => sub {
+    parse_tags();
+    redirect '/';
+};
+
+get '/tags' => sub {
+    my $before = gettimeofday;
+    #my $data = cache->compute( 'startseite', '5min', sub { get_startseite() } );
+    my $tags = get_tags();
+    my $anzahl = keys %{$tags};
+    my $elapsed = gettimeofday - $before;
+    template 'tags', {taglist => $tags->{'list'}, tags => $tags->{'entries'}, anzahl => $anzahl, dauer => $elapsed};
+};
+
+get '/t/:tagname' => sub {
+    my $before = gettimeofday;
+    my $tagname = params->{'tagname'};
+    my $tags = get_tags();
+    my @entries = @{$tags->{'entries'}->{$tagname}->{'entries'}};
+    my %entries_h;
+    foreach my $e (@entries) {
+        debug("+ $e");
+        $entries_h{$e} = 1;
+    }
+
+    my $data = get_startseite();
+
+    my %result;
+    while (my ($key, $value) = each %$data) {
+        debug($key);
+        if (exists $entries_h{$key}) {
+            debug("GEFUNDEN");
+            $result{$key} = $value;
+        }
+    }
+
+    my $anzahl = scalar @entries;
+    debug("found $anzahl");
+    my $elapsed = gettimeofday - $before;
+    template 'index', {data => \%result, anzahl => $anzahl, dauer => $elapsed};
+
+};
+
 true;
 
 sub get_startseite {
@@ -154,4 +199,43 @@ sub get_startseite {
     my $json = -e $filename ? read_file $filename : '{}';
     my $data = from_json encode('UTF-8', $json);
     return $data;
+}
+
+sub get_tags {
+    my $filename = config->{data}{tags};
+    my $json = -e $filename ? read_file $filename : '{}';
+    my $data = from_json encode('UTF-8', $json);
+    return $data;
+}
+
+sub parse_tags {
+    my $tagsfile = config->{data}{tags};
+    my $data = get_startseite();
+    my %tag_count;
+    my %tag_entries;
+    while (my ($key, $value) = each %$data) {
+        debug("Eintrag #" . $key);
+        my @matches = ($value->{text} =~ m/t:(\w*)/g);
+        debug(scalar @matches . "Tags gefunden");
+        foreach my $tag (@matches) {
+            if ($tag ne '') {
+                $tag_count{$tag}++;
+                push @{$tag_entries{$tag}}, $key;
+                debug("Tag: $tag");
+            }
+        }        
+    }
+
+    my $tagdata;
+    while (my ($key, $value) = each %tag_count) {
+        $tagdata->{'entries'}->{$key} = {
+            count => $value,
+            entries => \@{$tag_entries{$key}},
+        };
+    }
+    my @taglist = keys %tag_count;
+    $tagdata->{'list'} = \@taglist;
+
+    write_file $tagsfile, to_json($tagdata);
+
 }

@@ -1,0 +1,9 @@
+<% USE dumper(indent=0, pad="<br>") %>
+
+<h2>list of tags</h2>
+
+<p>
+<% FOREACH t IN taglist.sort %>
+<a href="/t/<% t %>"><% t %></a>
+<% END %>
+</p>
